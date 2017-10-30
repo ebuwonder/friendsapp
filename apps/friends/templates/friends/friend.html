@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Friends</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'friends/style.css' %}">
+  </head>
+  <body>
+    <div class="wrapper">
+      <body>
+        <nav class="loginout">
+          <a href="/logout">Log Out</a>
+        </nav>
+        <h2>Hello, {{current_user.alias}}!</h2>
+        <h3>Here is the list of your friends:</h3>
+        {% if not friends %}
+        <p>You don't have any friends...yet.</p>
+        {% else %}
+        <table>
+          <tr>
+            <th>Alias</th>
+            <th>Action</th>
+          </tr>
+          {% for user in friends %}
+          <tr>
+            <td>{{user.alias}}</td>
+            <td><a href="/user/{{user.id}}">View Profile</a>  <a href="/remove/{{user.id}}">Remove as Friend</a></td>
+          </tr>
+          {% endfor %}
+        </table>
+        {% endif %}
+        <h3>Other users not on your friends list:</h3>
+        {% if not_friends %}
+        <table>
+          <tr>
+            <th>Alias</th>
+            <th>Action</th>
+          </tr>
+          {% for user in not_friends %}
+          <tr>
+            <td><a href="/user/{{user.id}}">{{user.alias}}</a></td>
+            <td><form action="/add/{{user.id}}" method="POST">
+              {% csrf_token %}
+              <!-- <input type="submit" value="Add as Friend"> -->
+              <button type="submit" name="Add as Friend">Add as Friend</button>
+            </form></td>
+          </tr>
+          {% endfor %}
+        </table>
+        {% endif %}
+      </body>
+      </div>
+    </div>
+  </body>
+</html>
